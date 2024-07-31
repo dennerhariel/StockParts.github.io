@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file, flash
-import mysql.connector
+import pymysql
 from datetime import datetime, timedelta
 import io
 import csv
@@ -26,13 +26,12 @@ app.config['MAIL_DEFAULT_SENDER'] = 'stockparts631@gmail.com'
 mail = Mail(app)
 
 def get_db_connection():
-    conn = mysql.connector.connect(
+    conn = pymysql.connect(
         host='roundhouse.proxy.rlwy.net',
         port=23143,
-        database='railway',
         user='root',
         password='fgXmcQzqrTiVRGvQrqdprqIFkUTLNJDB',
-        auth_plugin='mysql_native_password'
+        database='railway'
     )
     return conn
 
@@ -98,7 +97,7 @@ def send_email(to_email, new_password):
     <body>
         <div class="container">
             <div class="header">
-                <img src="https://i.imgur.com/x3cZ0FS.png" alt="Logo"style="width: 113px; height: 80px;">
+                <img src="https://i.imgur.com/x3cZ0FS.png" alt="Logo" style="width: 113px; height: 80px;">
                 <h1>Recuperação de Senha</h1>
             </div>
             <div class="content">
@@ -123,7 +122,7 @@ def send_email(to_email, new_password):
     except Exception as e:
         print(f'Erro ao enviar e-mail: {e}')
         raise e
-        
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     msg = ''
